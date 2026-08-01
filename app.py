@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, flash
 from app.database import create_table, get_connection
+import math
 
 app = Flask(__name__)
 
@@ -53,13 +54,18 @@ def students():
     search = request.args.get("search", "")
     sort = request.args.get("sort", "name_asc")
     department = request.args.get("department", "")
+    page = request.args.get("page", 1, type=int)
+
+    per_page = 5
+    offset = (page - 1) * per_page
 
     connection = get_connection()
     cursor = connection.cursor()
 
-    query = "SELECT * FROM students"
-    conditions = []
+    where_clause = ""
     params = []
+
+    conditions = []
 
     if search:
         conditions.append("name LIKE ?")
@@ -70,7 +76,15 @@ def students():
         params.append(department)
 
     if conditions:
-        query += " WHERE " + " AND ".join(conditions)
+        where_clause = " WHERE " + " AND ".join(conditions)
+
+    cursor.execute(
+        "SELECT COUNT(*) FROM students" + where_clause,
+        params
+    )
+
+    total_students = cursor.fetchone()[0]
+    total_pages = max(1, math.ceil(total_students / per_page))
 
     sort_options = {
         "name_asc": "name ASC",
@@ -81,9 +95,18 @@ def students():
         "cgpa_desc": "cgpa DESC"
     }
 
-    query += " ORDER BY " + sort_options.get(sort, "name ASC")
+    query = (
+        "SELECT * FROM students"
+        + where_clause
+        + " ORDER BY "
+        + sort_options.get(sort, "name ASC")
+        + " LIMIT ? OFFSET ?"
+    )
 
-    cursor.execute(query, params)
+    cursor.execute(
+        query,
+        params + [per_page, offset]
+    )
 
     students = cursor.fetchall()
 
@@ -94,7 +117,9 @@ def students():
         students=students,
         search=search,
         sort=sort,
-        department=department
+        department=department,
+        page=page,
+        total_pages=total_pages
     )
 
 

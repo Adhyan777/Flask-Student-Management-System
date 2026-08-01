@@ -1,4 +1,6 @@
 from flask import Flask, render_template, request, redirect, flash, Response, url_for
+import os
+from werkzeug.utils import secure_filename
 from app.database import create_table, get_connection
 import math
 import csv
@@ -7,6 +9,20 @@ import io
 app = Flask(__name__)
 
 app.secret_key = "student_management_secret_key"
+
+UPLOAD_FOLDER = "static/uploads"
+
+app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
+
+ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg"}
+
+def allowed_file(filename):
+
+    return (
+        "." in filename
+        and filename.rsplit(".", 1)[1].lower()
+        in ALLOWED_EXTENSIONS
+    )
 
 create_table()
 
@@ -153,19 +169,46 @@ def add_student():
 
     if request.method == "POST":
 
+        name = request.form["name"]
+        age = request.form["age"]
+        department = request.form["department"]
+        cgpa = request.form["cgpa"]
+
+        photo = request.files.get("photo")
+
+        filename = None
+
+        if photo and allowed_file(photo.filename):
+
+            filename = secure_filename(photo.filename)
+
+            photo.save(
+                os.path.join(
+                    app.config["UPLOAD_FOLDER"],
+                    filename
+                )
+            )
+
         connection = get_connection()
         cursor = connection.cursor()
 
         cursor.execute(
             """
-            INSERT INTO students(name, age, department, cgpa)
-            VALUES (?, ?, ?, ?)
+            INSERT INTO students(
+                name,
+                age,
+                department,
+                cgpa,
+                photo
+            )
+            VALUES (?, ?, ?, ?, ?)
             """,
             (
-                request.form["name"],
-                request.form["age"],
-                request.form["department"],
-                request.form["cgpa"]
+                name,
+                age,
+                department,
+                cgpa,
+                filename
             )
         )
 
@@ -177,7 +220,6 @@ def add_student():
         return redirect("/students")
 
     return render_template("add_student.html")
-
 
 @app.route("/edit/<int:id>", methods=["GET", "POST"])
 def edit_student(id):

@@ -17,12 +17,13 @@ def create_table():
 
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS students(
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT NOT NULL,
-            age INTEGER NOT NULL,
-            department TEXT NOT NULL,
-            cgpa REAL NOT NULL
-        )
+    id INTEGER PRIMARY KEY,
+    name TEXT,
+    age INTEGER,
+    department TEXT,
+    cgpa REAL,
+    photo TEXT
+)
     """)
 
     connection.commit()

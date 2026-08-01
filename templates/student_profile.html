@@ -10,6 +10,19 @@
 
     <div class="card-body">
 
+    {% if student.photo %}
+
+<div class="text-center mb-3">
+
+    <img src="{{ url_for('static', filename='uploads/' + student.photo) }}"
+         class="rounded-circle"
+         width="150"
+         height="150">
+
+</div>
+
+{% endif %}
+
         <table class="table table-bordered">
 
             <tr>

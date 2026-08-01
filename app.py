@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, flash, Response
+from flask import Flask, render_template, request, redirect, flash, Response, url_for
 from app.database import create_table, get_connection
 import math
 import csv
@@ -263,6 +263,56 @@ def export_csv():
             "attachment; filename=students.csv"
         }
     )
+
+@app.route("/import", methods=["GET", "POST"])
+def import_csv():
+
+    if request.method == "POST":
+
+        file = request.files.get("csv_file")
+
+        if not file or file.filename == "":
+            flash("Please choose a CSV file.", "danger")
+            return redirect(url_for("import_csv"))
+
+        stream = io.StringIO(file.stream.read().decode("UTF8"), newline="")
+        reader = csv.reader(stream)
+
+        next(reader, None)
+
+        connection = get_connection()
+        cursor = connection.cursor()
+
+        count = 0
+
+        for row in reader:
+
+            if len(row) < 5:
+                continue
+
+            cursor.execute(
+                """
+                INSERT INTO students(name, age, department, cgpa)
+                VALUES (?, ?, ?, ?)
+                """,
+                (
+                    row[1],
+                    row[2],
+                    row[3],
+                    row[4]
+                )
+            )
+
+            count += 1
+
+        connection.commit()
+        connection.close()
+
+        flash(f"{count} students imported successfully!", "success")
+
+        return redirect("/students")
+
+    return render_template("import_students.html")
 
 if __name__ == "__main__":
     app.run(debug=True)

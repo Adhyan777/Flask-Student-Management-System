@@ -2,13 +2,9 @@
 
 A modern Student Management System built using **Python, Flask, SQLite, Bootstrap, HTML, CSS, and JavaScript**.
 
-## 🚀 Live Demo
+### 🚀 Live Demo
 
-(Add your Render URL here after deployment)
-
-Example:
-
-https://flask-student-management-system-1pz8.onrender.com/
+🌐 **Live Application:** https://flask-student-management-system-1pz8.onrender.com
 
 ---
 

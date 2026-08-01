@@ -110,15 +110,27 @@ http://127.0.0.1:5000
 
 ## 📸 Screenshots
 
-(Add screenshots here)
+## 📸 Screenshots
 
-Dashboard
+### 🔐 Login Page
 
-Students Page
+![Login](screenshots/login.png)
 
-Login Page
+### 📊 Dashboard
 
-Student Profile
+![Dashboard](screenshots/dashboard.png)
+
+### 👨‍🎓 Students Page
+
+![Students](screenshots/students.png)
+
+### ➕ Add Student
+
+![Add Student](screenshots/add_student.png)
+
+### 👤 Student Profile
+
+![Profile](screenshots/profile.png)
 
 ---
 

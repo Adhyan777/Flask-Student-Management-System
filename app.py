@@ -1,6 +1,8 @@
-from flask import Flask, render_template, request, redirect, flash
+from flask import Flask, render_template, request, redirect, flash, Response
 from app.database import create_table, get_connection
 import math
+import csv
+import io
 
 app = Flask(__name__)
 
@@ -211,6 +213,56 @@ def delete_student(id):
 
     return redirect("/students")
 
+@app.route("/export")
+def export_csv():
+
+    connection = get_connection()
+    cursor = connection.cursor()
+
+    cursor.execute("""
+        SELECT id, name, age, department, cgpa
+        FROM students
+        ORDER BY id
+    """)
+
+    students = cursor.fetchall()
+
+    connection.close()
+
+    output = io.StringIO()
+
+    writer = csv.writer(output)
+
+    writer.writerow([
+        "ID",
+        "Name",
+        "Age",
+        "Department",
+        "CGPA"
+    ])
+
+    for student in students:
+
+        writer.writerow([
+            student["id"],
+            student["name"],
+            student["age"],
+            student["department"],
+            student["cgpa"]
+        ])
+
+    csv_data = output.getvalue()
+
+    output.close()
+
+    return Response(
+        csv_data,
+        mimetype="text/csv",
+        headers={
+            "Content-Disposition":
+            "attachment; filename=students.csv"
+        }
+    )
 
 if __name__ == "__main__":
     app.run(debug=True)

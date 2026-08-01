@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2 class="mb-4">Dashboard</h2>
+
+<div class="row">
+
+    <div class="col-md-3 mb-4">
+
+        <div class="card bg-primary text-white shadow">
+
+            <div class="card-body">
+
+                <h5>Total Students</h5>
+
+                <h2>{{ total_students }}</h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-3 mb-4">
+
+        <div class="card bg-success text-white shadow">
+
+            <div class="card-body">
+
+                <h5>Average CGPA</h5>
+
+                <h2>{{ avg_cgpa }}</h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-3 mb-4">
+
+        <div class="card bg-warning text-dark shadow">
+
+            <div class="card-body">
+
+                <h5>Highest CGPA</h5>
+
+                <h2>{{ highest_cgpa }}</h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-3 mb-4">
+
+        <div class="card bg-danger text-white shadow">
+
+            <div class="card-body">
+
+                <h5>Lowest CGPA</h5>
+
+                <h2>{{ lowest_cgpa }}</h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<hr>
+
+<div class="row">
+
+    <div class="col-md-12">
+
+        <div class="card shadow">
+
+            <div class="card-body">
+
+                <h4>Welcome</h4>
+
+                <p>
+
+                    This Student Management System was built using
+                    Flask, SQLite and Bootstrap.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

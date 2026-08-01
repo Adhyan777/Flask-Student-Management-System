@@ -12,9 +12,9 @@
 
 <form method="GET" action="/students" class="mb-3">
 
-    <div class="row">
+    <div class="row g-2">
 
-        <div class="col-md-5">
+        <div class="col-md-4">
 
             <input
                 type="text"
@@ -25,23 +25,73 @@
 
         </div>
 
-        <div class="col-md-5">
+        <div class="col-md-3">
+
+            <select
+                class="form-select"
+                name="department">
+
+                <option value="">All Departments</option>
+
+                <option value="AI & ML"
+                    {% if department=="AI & ML" %}selected{% endif %}>
+                    AI & ML
+                </option>
+
+                <option value="CSE"
+                    {% if department=="CSE" %}selected{% endif %}>
+                    CSE
+                </option>
+
+                <option value="IT"
+                    {% if department=="IT" %}selected{% endif %}>
+                    IT
+                </option>
+
+                <option value="ECE"
+                    {% if department=="ECE" %}selected{% endif %}>
+                    ECE
+                </option>
+
+            </select>
+
+        </div>
+
+        <div class="col-md-3">
 
             <select
                 class="form-select"
                 name="sort">
 
-                <option value="name_asc" {% if sort=="name_asc" %}selected{% endif %}>Name (A-Z)</option>
+                <option value="name_asc"
+                    {% if sort=="name_asc" %}selected{% endif %}>
+                    Name (A-Z)
+                </option>
 
-                <option value="name_desc" {% if sort=="name_desc" %}selected{% endif %}>Name (Z-A)</option>
+                <option value="name_desc"
+                    {% if sort=="name_desc" %}selected{% endif %}>
+                    Name (Z-A)
+                </option>
 
-                <option value="age_asc" {% if sort=="age_asc" %}selected{% endif %}>Age (Low-High)</option>
+                <option value="age_asc"
+                    {% if sort=="age_asc" %}selected{% endif %}>
+                    Age (Low-High)
+                </option>
 
-                <option value="age_desc" {% if sort=="age_desc" %}selected{% endif %}>Age (High-Low)</option>
+                <option value="age_desc"
+                    {% if sort=="age_desc" %}selected{% endif %}>
+                    Age (High-Low)
+                </option>
 
-                <option value="cgpa_asc" {% if sort=="cgpa_asc" %}selected{% endif %}>CGPA (Low-High)</option>
+                <option value="cgpa_asc"
+                    {% if sort=="cgpa_asc" %}selected{% endif %}>
+                    CGPA (Low-High)
+                </option>
 
-                <option value="cgpa_desc" {% if sort=="cgpa_desc" %}selected{% endif %}>CGPA (High-Low)</option>
+                <option value="cgpa_desc"
+                    {% if sort=="cgpa_desc" %}selected{% endif %}>
+                    CGPA (High-Low)
+                </option>
 
             </select>
 
@@ -50,9 +100,7 @@
         <div class="col-md-2">
 
             <button class="btn btn-success w-100">
-
                 Apply
-
             </button>
 
         </div>
@@ -66,14 +114,12 @@
     <thead class="table-dark">
 
         <tr>
-
             <th>ID</th>
             <th>Name</th>
             <th>Age</th>
             <th>Department</th>
             <th>CGPA</th>
             <th>Actions</th>
-
         </tr>
 
     </thead>
@@ -94,17 +140,13 @@
 
             <a href="/edit/{{ student.id }}"
                class="btn btn-warning btn-sm">
-
                 Edit
-
             </a>
 
             <a href="/delete/{{ student.id }}"
                class="btn btn-danger btn-sm"
                onclick="return confirm('Delete this student?')">
-
                 Delete
-
             </a>
 
         </td>

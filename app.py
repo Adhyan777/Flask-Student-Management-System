@@ -52,6 +52,7 @@ def students():
 
     search = request.args.get("search", "")
     sort = request.args.get("sort", "name_asc")
+    department = request.args.get("department", "")
 
     connection = get_connection()
     cursor = connection.cursor()
@@ -63,6 +64,10 @@ def students():
     if search:
         conditions.append("name LIKE ?")
         params.append(f"%{search}%")
+
+    if department:
+        conditions.append("department = ?")
+        params.append(department)
 
     if conditions:
         query += " WHERE " + " AND ".join(conditions)
@@ -88,7 +93,8 @@ def students():
         "students.html",
         students=students,
         search=search,
-        sort=sort
+        sort=sort,
+        department=department
     )
 
 

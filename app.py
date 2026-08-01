@@ -124,6 +124,29 @@ def students():
         total_pages=total_pages
     )
 
+@app.route("/student/<int:id>")
+def student_profile(id):
+
+    connection = get_connection()
+    cursor = connection.cursor()
+
+    cursor.execute(
+        "SELECT * FROM students WHERE id=?",
+        (id,)
+    )
+
+    student = cursor.fetchone()
+
+    connection.close()
+
+    if student is None:
+        flash("Student not found.", "danger")
+        return redirect("/students")
+
+    return render_template(
+        "student_profile.html",
+        student=student
+    )
 
 @app.route("/add", methods=["GET", "POST"])
 def add_student():

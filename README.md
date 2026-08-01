@@ -110,8 +110,6 @@ http://127.0.0.1:5000
 
 ## 📸 Screenshots
 
-## 📸 Screenshots
-
 ### 🔐 Login Page
 
 ![Login](screenshots/login.png)

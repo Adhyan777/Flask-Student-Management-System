@@ -1,4 +1,13 @@
-from flask import Flask, render_template, request, redirect, flash, Response, url_for
+from flask import (
+    Flask,
+    render_template,
+    request,
+    redirect,
+    flash,
+    Response,
+    url_for,
+    session
+)
 import os
 from werkzeug.utils import secure_filename
 from app.database import create_table, get_connection
@@ -9,6 +18,9 @@ import io
 app = Flask(__name__)
 
 app.secret_key = "student_management_secret_key"
+
+ADMIN_USERNAME = "admin"
+ADMIN_PASSWORD = "admin123"
 
 UPLOAD_FOLDER = "static/uploads"
 
@@ -26,6 +38,53 @@ def allowed_file(filename):
 
 create_table()
 
+@app.route("/login", methods=["GET", "POST"])
+def login():
+
+    if request.method == "POST":
+
+        username = request.form["username"]
+        password = request.form["password"]
+
+        if (
+            username == ADMIN_USERNAME
+            and
+            password == ADMIN_PASSWORD
+        ):
+
+            session["logged_in"] = True
+
+            flash("Login successful!", "success")
+
+            return redirect("/")
+
+        flash("Invalid username or password.", "danger")
+
+    return render_template("login.html")
+
+@app.route("/logout")
+def logout():
+
+    session.clear()
+
+    flash("Logged out successfully.", "success")
+
+    return redirect("/login")
+
+@app.before_request
+def require_login():
+
+    allowed_routes = [
+        "login",
+        "static"
+    ]
+
+    if (
+        request.endpoint not in allowed_routes
+        and
+        not session.get("logged_in")
+    ):
+        return redirect("/login")
 
 @app.route("/")
 def home():
